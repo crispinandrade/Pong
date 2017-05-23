@@ -5,8 +5,8 @@ var WIDTH = 800,
     upArrow = 38,
     downArrow = 40,
     canvas, 
-    ctx, 
-    keystate,
+    context, 
+    keyPos,
     player, 
     ai, 
     ball;
@@ -19,13 +19,13 @@ player = {
     height: 100,
     update: function() {
         // Add or subtract 7px when up arrow or down arrow
-        if (keystate[upArrow]) this.y -= 10; 
-        if (keystate[downArrow]) this.y += 10;
+        if (keyPos[upArrow]) this.y -= 10; 
+        if (keyPos[downArrow]) this.y += 10;
         // restrict paddles within the canvas
         this.y = Math.max(Math.min(this.y, HEIGHT - this.height), 0); 
     },
     draw: function() {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
 };
 
@@ -42,7 +42,7 @@ ai = {
         this.y = Math.max(Math.min(this.y, HEIGHT - this.height), 0); 
     },
     draw: function() {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
 };
 
@@ -107,7 +107,7 @@ ball = {
 
     // create the ball object
     draw: function() {
-        ctx.fillRect(this.x, this.y, this.side, this.side);
+        context.fillRect(this.x, this.y, this.side, this.side);
     }
 };
 
@@ -117,15 +117,15 @@ function main() {
     canvas = document.createElement("canvas");
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
-    ctx = canvas.getContext('2d');
+    context = canvas.getContext('2d');
     document.body.appendChild(canvas);
 
-    keystate = {};
+    keyPos = {};
     document.addEventListener("keydown", function(evt) { // checks if key is pressed
-        keystate[evt.keyCode] = true;
+        keyPos[evt.keyCode] = true;
     });
     document.addEventListener("keyup", function(evt) { // checks if key is not pressed
-        delete keystate[evt.keyCode]; 
+        delete keyPos[evt.keyCode]; 
     });
 
     // Call init function to create paddles and ball objects
@@ -155,11 +155,11 @@ function update() {
     ai.update();   
 }
 function draw() {
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    context.fillRect(0, 0, WIDTH, HEIGHT);
 
-    ctx.save();
+    context.save();
     
-    ctx.fillStyle = "#fff";
+    context.fillStyle = "#fff";
 
     player.draw();
     ball.draw();
@@ -171,11 +171,11 @@ function draw() {
     var y = 0;
     var step = HEIGHT/25;
     while (y < HEIGHT) {
-        ctx.fillRect(x, y+step*0.25, w, step*0.5);
+        context.fillRect(x, y+step*0.25, w, step*0.5);
         y += step;
     }
 
-    ctx.restore();
+    context.restore();
 }
 
 // Called main to run the game
